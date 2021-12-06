@@ -332,8 +332,8 @@ subnet 10.39.7.148 netmask 255.255.255.252 {
 #}
 
 host FOOSHA {
-    hardware ethernet 5e:0d:2e:c6:9b:9a;
-    fixed-address 192.168.122.98;
+!!!    hardware ethernet 5e:0d:2e:c6:9b:9a;
+!!!   fixed-address 192.168.122.98;
 }
 ```
 
@@ -439,3 +439,92 @@ iface eth0 inet dhcp
 # !/bin/sh
 
 ```
+
+
+## 1. Agar topologi yang kalian buat dapat mengakses keluar, kalian diminta untuk mengkonfigurasi Foosha menggunakan iptables, tetapi Luffy tidak ingin menggunakan MASQUERADE.
+
+nano config.sh on Foosha
+```
+!!!iptables -t nat -A POSTROUTING -s 10.39.0.0/21 -o eth0 -j SNAT --to-source 192.168.122.98
+```
+
+Yang Butuh Update (Water7, Doriki, Jipangu, dan Guanhao)
+```
+echo nameserver 192.168.122.1 > /etc/resolv.conf
+```
+
+Test dengan ping
+
+---foto testing---
+
+## 2. Kalian diminta untuk mendrop semua akses HTTP dari luar Topologi kalian pada server yang memiliki ip DHCP dan DNS Server demi menjaga keamanan.
+
+nano config.sh on Foosha
+```
+iptables -A FORWARD -p tcp --dport 80 -d 10.39.7.128/29 -i eth0 -j DROP
+```
+
+```
+# doriki DNS
+iptables -A INPUT -s 10.39.7.130 -j DROP
+# subnet a2, a3, a6, a7
+iptables -A INPUT -s 10.39.7.0/25 -j DROP
+iptables -A INPUT -s 10.39.0.0/22 -j DROP
+iptables -A INPUT -s 10.39.4.0/23 -j DROP
+iptables -A INPUT -s 10.39.6.0/24 -j DROP
+```
+
+```
+iptables -A INPUT -p tcp --dport 80 -j DROP
+```
+
+Test
+```
+nmap 10.39.7.128
+nmap 10.39.7.131
+```
+
+---foto testing---
+
+## 3. Karena kelompok kalian maksimal terdiri dari 3 orang. Luffy meminta kalian untuk membatasi DHCP dan DNS Server hanya boleh menerima maksimal 3 koneksi ICMP secara bersamaan menggunakan iptables, selebihnya didrop.
+
+nano config.sh on Jipangu and Doriki
+```
+iptables -A INPUT -p icmp -m connlimit --connlimit-above 3 --connlimit-mask 0 -j DROP
+```
+
+---foto testing---
+
+Kemudian kalian diminta untuk membatasi akses ke Doriki yang berasal dari subnet Blueno, Cipher, Elena dan Fukuro dengan beraturan sebagai berikut
+
+
+## 4. Akses dari subnet Blueno dan Cipher hanya diperbolehkan pada pukul 07.00 - 15.00 pada hari Senin sampai Kamis
+
+Doriki
+```
+iptables -A INPUT -s 10.39.7.0/25 -m time --timestart 07:00 --timestop 15:00 --weekdays Mon,Tue,Wed,Thu -j ACCEPT
+iptables -A INPUT -s 10.39.7.0/25 -m time --timestart 15:01 --timestop 23:59 -j REJECT
+iptables -A INPUT -s 10.39.7.0/25 -m time --timestart 00:00 --timestop 06:59 -j REJECT
+iptables -A INPUT -s 10.39.7.0/25 -m time --timestart 07:00 --timestop 15:00 --weekdays Fri,Sat,Sun -j REJECT
+
+iptables -A INPUT -s 10.39.0.0/22 -m time --timestart 07:00 --timestop 15:00 --weekdays Mon,Tue,Wed,Thu -j ACCEPT
+iptables -A INPUT -s 10.39.0.0/22 -m time --timestart 15:01 --timestop 06:59 -j REJECT
+iptables -A INPUT -s 10.39.0.0/22 -m time --timestart 07:00 --timestop 15:00 --weekdays Fri,Sat,Sun -j REJECT
+```
+
+```
+date
+```
+
+```
+Senin
+date -s "6 DEC 2021 08:00:00" -> bisa
+date -s "6 DEC 2021 18:00:00" -> gabisa
+
+
+Sabtu
+date -s "13 NOV 2021 09:00:00" -> gabisa
+date -s "13 NOV 2021 01:00:00" -> gabisa
+```
+
+--Foto Testing---
