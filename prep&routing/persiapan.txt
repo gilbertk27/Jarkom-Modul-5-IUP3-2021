@@ -1,0 +1,316 @@
+### Doriki
+
+```
+auto eth0
+iface eth0 inet static
+address 10.39.7.130
+netmask 255.255.255.248
+gateway 10.39.7.129
+
+```
+
+### Jipangu
+
+```
+auto eth0
+iface eth0 inet static
+address 10.39.7.131
+netmask 255.255.255.248
+gateway 10.39.7.129
+
+```
+
+### Water7
+
+```
+auto lo
+iface lo inet loopback
+
+auto eth0
+iface eth0 inet static
+address 10.39.7.145
+netmask 255.255.255.252
+gateway 10.39.7.146
+
+auto eth1
+iface eth1 inet static
+address 10.39.7.129
+netmask 255.255.255.248
+
+auto eth2
+iface eth2 inet static
+address 10.39.7.1
+netmask 255.255.255.128
+
+auto eth3
+iface eth3 inet static
+address 10.39.0.1
+netmask 255.255.252.0
+```
+
+### Blueno
+
+```
+auto eth0
+iface eth0 inet static
+address 10.39.7.2
+netmask 255.255.255.128
+gateway 10.39.7.1
+```
+
+### Cipher
+
+```
+auto eth0
+iface eth0 inet static
+address 10.39.0.2
+netmask 255.255.252.0
+gateway 10.39.0.1
+```
+
+### Foosha
+
+ip eth0 192.168.122.96
+
+```
+auto lo
+iface lo inet loopback
+
+auto eth0
+iface eth0 inet dhcp
+hwaddress ether b2:ab:03:2e:50:76
+
+auto eth1
+iface eth1 inet static
+address 10.39.7.146
+netmask 255.255.255.252
+
+auto eth2
+iface eth2 inet static
+address 10.39.7.149
+netmask 255.255.255.252
+```
+
+### Jorge
+
+```
+auto eth0
+iface eth0 inet static
+address 10.39.7.138
+netmask 255.255.255.248
+gateway 10.39.7.137
+```
+
+### Maingate
+
+```
+auto eth0
+iface eth0 inet static
+address 10.39.7.139
+netmask 255.255.255.248
+gateway 10.39.7.137
+```
+
+### Guanhao
+
+```
+auto lo
+iface lo inet loopback
+
+auto eth0
+iface eth0 inet static
+address 10.39.7.150
+netmask 255.255.255.252
+gateway 10.39.7.149
+
+auto eth1
+iface eth1 inet static
+address 10.39.7.137
+netmask 255.255.255.248
+
+auto eth2
+iface eth2 inet static
+address 10.39.4.1
+netmask 255.255.254.0
+
+auto eth3
+iface eth3 inet static
+address 10.39.6.1
+netmask 255.255.255.0
+```
+
+### Elena
+
+```
+auto eth0
+iface eth0 inet static
+address 10.39.4.2
+netmask 255.255.254.0
+gateway 10.39.4.1
+```
+
+### Fukurou
+
+```
+auto eth0
+iface eth0 inet static
+address 10.39.6.2
+netmask 255.255.255.0
+gateway 10.39.6.1
+```
+
+## Routing Foosha
+
+```
+# kiri
+route add -net 10.39.7.128 netmask 255.255.255.248 gw 10.39.7.145
+route add -net 10.39.7.0 netmask 255.255.255.128 gw 10.39.7.145
+route add -net 10.39.0.0 netmask 255.255.252.0 gw 10.39.7.145
+
+# kanan
+route add -net 10.39.4.0 netmask 255.255.254.0 gw 10.39.7.150
+route add -net 10.39.6.0 netmask 255.255.255.0 gw 10.39.7.150
+route add -net 10.39.7.136  netmask 255.255.255.248 gw 10.39.7.150
+
+```
+
+## Internet
+
+ps: ini masih gatau nanti ada rule khusus apa engga, sebenernya belom diminta buat ngecek internet
+
+```
+iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE -s 10.39.0.0/21
+```
+
+```
+echo "nameserver 192.168.122.1" > /etc/resolv.conf
+```
+
+## Config DHCP
+
+4 host akan menggunakan DHCP, maka harus dibuat dulu subnetnya
+
+Config Network menjadi
+
+```bash
+auto lo
+iface lo inet loopback
+
+auto eth0
+iface eth0 inet dhcp
+```
+
+Kemudian install deps
+
+```bash
+# jipangu
+apt-get update
+apt-get install isc-dhcp-server -y
+```
+
+### Pada Jipangu
+
+Ubah config interfaces di isc-dhcp-server
+
+```
+# /etc/default/isc-dhcp-server
+INTERFACES="eth0"
+```
+
+Tambahkan eth0
+
+```bash
+# /etc/dhcp/dhcpd.conf
+# Blueno A2
+subnet 10.39.7.0 netmask 255.255.255.128 {
+	range 10.39.7.2 10.39.7.126;
+	option routers 10.39.7.1;
+	option broadcast-address 10.39.7.127;
+	option domain-name-servers 10.39.7.130;
+	default-lease-time 600;
+	max-lease-time 7200;
+}
+
+# Cipher A3
+subnet 10.39.0.0 netmask 255.255.252.0 {
+	range 10.39.0.2 10.39.3.254;
+	option routers 10.39.0.1;
+	option broadcast-address 10.39.3.255;
+	option domain-name-servers 10.39.7.130;
+	default-lease-time 600;
+	max-lease-time 7200;
+}
+
+# Elena A6
+subnet 10.39.4.0 netmask 255.255.254.0 {
+	range 10.39.4.2 10.39.5.254;
+	option routers 10.39.4.1;
+	option broadcast-address 10.39.5.255;
+	option domain-name-servers 10.39.7.130;
+	default-lease-time 600;
+	max-lease-time 7200;
+}
+
+# Fukurou A7
+subnet 10.39.6.0 netmask 255.255.255.0 {
+	range 10.39.6.2 10.39.6.254;
+	option routers 10.39.6.1;
+	option broadcast-address 10.39.6.255;
+	option domain-name-servers 10.39.7.130;
+	default-lease-time 600;
+	max-lease-time 7200;
+}
+
+# Routing dari Jipangu ke router
+subnet 10.39.7.128 netmask 255.255.255.248 {
+        option routers 10.39.7.129;
+}
+```
+
+## Relay
+
+Water7 & Guanhao
+
+```bash
+# water7 guanhao
+apt-get update
+apt-get install isc-dhcp-relay -y
+```
+
+Kemudian pada relay diconfig
+
+### Water7 & Guanhao
+
+```bash
+# /etc/default/isc-dhcp-relay
+# What servers should the DHCP relay forward requests to?
+SERVERS="10.39.7.131"
+
+# On what interfaces should the DHCP relay (dhrelay) serve DHCP requests?
+INTERFACES="eth0 eth1 eth2 eth3"
+
+# Additional options that are passed to the DHCP relay daemon?
+OPTIONS=""
+```
+
+
+### 1
+
+> Agar topologi yang kalian buat dapat mengakses keluar, kalian diminta untuk mengkonfigurasi Foosha menggunakan iptables, tetapi Luffy tidak ingin menggunakan MASQUERADE.
+> 
+
+```bash
+iptables -t nat -A POSTROUTING -s 10.39.0.0/21 -o eth0 -j SNAT --to-source 192.168.122.96
+```
+
+## 2
+
+> Kalian diminta untuk mendrop semua akses HTTP dari luar Topologi kalian pada server yang memiliki ip DHCP dan DNS Server demi menjaga keamanan.
+>
+# doriki DNS
+iptables -A INPUT -p tcp --dport 80 -s 10.39.7.130 -j DROP
+# subnet a2, a3, a6, a7
+iptables -A INPUT -p tcp --dport 80 -s 10.39.7.0/25 -j DROP
+iptables -A INPUT -p tcp --dport 80 -s 10.39.0.0/22 -j DROP
+iptables -A INPUT -p tcp --dport 80 -s 10.39.4.0/23 -j DROP
+iptables -A INPUT -p tcp --dport 80 -s 10.39.76.0/24 -j DROP

@@ -1,0 +1,174 @@
+---KONFIGURASI NETWORK ADAPTER---
+
+FOOSHA
+
+auto eth0
+iface eth0 inet dhcp
+
+auto eth1
+iface eth1 inet static
+	address 10.39.7.145
+	netmask 255.255.255.252
+
+auto eth2
+iface eth2 inet static
+	address 10.39.7.149
+	netmask 255.255.255.252
+	
+WATER7
+
+auto eth0
+iface eth0 inet static
+	address 10.39.7.146
+	netmask 255.255.255.252
+  	gateway 10.39.7.145
+  
+auto eth1
+iface eth1 inet static
+	address 10.39.7.1
+	netmask 255.255.255.128
+  
+auto eth2
+iface eth2 inet static
+  address 10.39.7.129
+  netmask 255.255.255.248
+
+
+auto eth3
+iface eth3 inet static
+  address 10.39.0.1
+  netmask 255.255.252.0
+
+GUANHAO
+
+auto eth0
+iface eth0 inet static
+	address 10.39.7.150
+	netmask 255.255.255.252
+  	gateway 10.39.7.149
+  
+auto eth1
+iface eth1 inet static
+	address 10.39.6.1
+	netmask 255.255.255.0
+  
+auto eth2
+iface eth2 inet static
+  address 10.39.7.137
+  netmask 255.255.255.248
+
+
+auto eth3
+iface eth3 inet static
+  address 10.39.4.1
+  netmask 255.255.254.0
+
+BLUENO
+
+#auto eth0
+#iface eth0 inet static
+auto eth0
+iface eth0 inet dhcp
+	#address 10.39.7.2
+	#netmask 255.255.255.128
+	#gateway 10.39.7.1
+
+
+DORIKI
+auto eth0
+iface eth0 inet static
+	address 10.39.7.130
+	netmask 255.255.255.248
+	gateway 10.39.7.129
+	
+	
+JIPANGU
+auto eth0
+iface eth0 inet static
+	address 10.39.7.131
+	netmask 255.255.255.248
+	gateway 10.39.7.129
+
+FUKUROU	
+#auto eth0
+#iface eth0 inet static
+auto eth0
+iface eth0 inet dhcp
+	#address 10.39.0.2
+	#netmask 255.255.252.0
+	#gateway 10.39.0.1
+
+MAINGATE
+auto eth0
+iface eth0 inet static
+	address 10.39.7.139
+	netmask 255.255.255.248
+	gateway 10.39.7.137
+	
+	
+JORGE
+auto eth0
+iface eth0 inet static
+	address 10.39.7.138
+	netmask 255.255.255.248
+	gateway 10.39.7.137
+	
+	
+ELENA
+auto eth0
+iface eth0 inet static
+#auto eth0
+#iface eth0 inet dhcp
+	address 10.39.6.2
+	netmask 255.255.255.0
+	gateway 10.39.6.1
+	
+---SCRIPT---
+
+FOOSHA
+
+# !/bin/sh
+
+route add -net 10.39.7.0 netmask 255.255.255.128 gw 10.39.7.146
+route add -net 10.39.7.128 netmask 255.255.255.248 gw 10.39.7.146
+route add -net 10.39.0.0 netmask 255.255.252.0 gw 10.39.7.146
+
+route add -net 10.39.6.0 netmask 255.255.255.0 gw 10.39.7.150
+route add -net 10.39.7.136 netmask 255.255.255.248 gw 10.39.7.150
+route add -net 10.39.4.0 netmask 255.255.254.0 gw 10.39.7.150
+
+#apt-get update
+#apt-get install isc-dhcp-relay -y
+
+#service isc-dhcp-relay start
+
+WATER7 & GUANHAO
+
+# !/bin/sh
+
+apt-get update
+apt-get install isc-dhcp-relay -y
+
+service isc-dhcp-relay start
+
+DORIKI
+
+# !/bin/sh
+
+apt-get update
+apt-get install bind9 -y
+
+JIPANGU
+
+# !/bin/sh
+
+apt-get update
+apt-get install isc-dhcp-server -y
+
+cp /root/isc-dhcp-server /etc/default
+cp /root/dhcpd.conf /etc/dhcp
+
+service isc-dhcp-server start
+
+
+
