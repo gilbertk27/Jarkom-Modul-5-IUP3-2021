@@ -27,6 +27,7 @@ Jumlah Host pada Elena adalah 300 host
 
 Jumlah Host pada Fukurou adalah 200 host
 
+![Untitled](https://user-images.githubusercontent.com/64368640/145033530-97cb1a26-1ace-4006-a20a-6c464f4f269d.jpg)
 
 ## B. Karena kalian telah belajar subnetting dan routing, Luffy ingin meminta kalian untuk membuat topologi tersebut menggunakan teknik CIDR atau VLSM.
 
