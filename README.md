@@ -57,7 +57,7 @@ iface lo inet loopback
 
 auto eth0
 iface eth0 inet dhcp
-hwaddress ether 5e:0d:2e:c6:9b:9a
+hwaddress ether 52:0d:61:93:5d:57
 
 auto eth1
 iface eth1 inet static
@@ -332,8 +332,8 @@ subnet 10.39.7.148 netmask 255.255.255.252 {
 #}
 
 host FOOSHA {
-!!!    hardware ethernet 5e:0d:2e:c6:9b:9a;
-!!!   fixed-address 192.168.122.98;
+    hardware ethernet 52:0d:61:93:5d:57;
+    fixed-address 192.168.122.98;
 }
 ```
 
