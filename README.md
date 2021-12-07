@@ -455,7 +455,7 @@ echo nameserver 192.168.122.1 > /etc/resolv.conf
 
 Test dengan ping
 
----foto testing---
+![image](https://user-images.githubusercontent.com/64368640/145019531-f51c28a9-c111-49c2-892d-9f14335171a7.png)
 
 ## 2. Kalian diminta untuk mendrop semua akses HTTP dari luar Topologi kalian pada server yang memiliki ip DHCP dan DNS Server demi menjaga keamanan.
 
@@ -483,8 +483,7 @@ Test
 nmap 10.39.7.128
 nmap 10.39.7.131
 ```
-
----foto testing---
+![image](https://user-images.githubusercontent.com/64368640/145019360-a62ef5be-c9fc-46ab-a634-da4d110e3059.png)
 
 ## 3. Karena kelompok kalian maksimal terdiri dari 3 orang. Luffy meminta kalian untuk membatasi DHCP dan DNS Server hanya boleh menerima maksimal 3 koneksi ICMP secara bersamaan menggunakan iptables, selebihnya didrop.
 
@@ -493,9 +492,9 @@ nano config.sh on Jipangu and Doriki
 iptables -A INPUT -p icmp -m connlimit --connlimit-above 3 --connlimit-mask 0 -j DROP
 ```
 
----foto testing---
+https://user-images.githubusercontent.com/64368640/145020853-df94b24f-d9cd-459f-bd12-ecdce617f4d7.mp4
 
-Kemudian kalian diminta untuk membatasi akses ke Doriki yang berasal dari subnet Blueno, Cipher, Elena dan Fukuro dengan beraturan sebagai berikut
+Kemudian kalian diminta untuk membatasi akses ke Doriki yang berasal dari subnet Blueno, Cipher, Water7 dan Doriki dengan beraturan sebagai berikut
 
 
 ## 4. Akses dari subnet Blueno dan Cipher hanya diperbolehkan pada pukul 07.00 - 15.00 pada hari Senin sampai Kamis
@@ -527,4 +526,13 @@ date -s "13 NOV 2021 09:00:00" -> gabisa
 date -s "13 NOV 2021 01:00:00" -> gabisa
 ```
 
---Foto Testing---
+![image](https://user-images.githubusercontent.com/64368640/145021275-51cc4790-3162-424b-95d2-31617cef9893.png)
+
+Problem:
+1.) DHCP cannot ping to google.com
+
+2.) Elena and Fukurou DHCP Failed
+
+3.) Case sensitive
+
+4.) Config sensitive
