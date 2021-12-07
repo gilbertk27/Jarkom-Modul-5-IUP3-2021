@@ -27,10 +27,10 @@ Jumlah Host pada Elena adalah 300 host
 
 Jumlah Host pada Fukurou adalah 200 host
 
---Foto Subnetting--
 
 ## B. Karena kalian telah belajar subnetting dan routing, Luffy ingin meminta kalian untuk membuat topologi tersebut menggunakan teknik CIDR atau VLSM.
 
+![image](https://user-images.githubusercontent.com/64368640/145031379-95aad0da-d532-473b-8798-0c35a3896428.png)
 
 | Subnet | Node | IP | Subnet Mask | Length |
 | --- | --- | --- | --- | --- |
@@ -341,7 +341,7 @@ subnet 10.39.7.148 netmask 255.255.255.252 {
 
 host FOOSHA {
     hardware ethernet 52:0d:61:93:5d:57;
-    fixed-address 192.168.122.98;
+    fixed-address 192.168.122.66;
 }
 ```
 
