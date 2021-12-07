@@ -53,7 +53,8 @@ Jumlah Host pada Fukurou adalah 200 host
 | H | GUANHAO | 10.39.4.1 | 255.255.254.0 | /23 |
 | H | Fukurou | 10.39.4.2 | 255.255.254.0 |  |
 
---Foto Pohon--
+![messageImage_1638880032271](https://user-images.githubusercontent.com/73428164/145029630-e8a8cab2-82d7-4b95-88c4-ad770b978fe4.jpeg)
+
 
 ### CONFIG NODE
 
